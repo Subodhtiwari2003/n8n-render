@@ -1,6 +1,7 @@
 services:
+  # Web service (UI + API)
   - type: web
-    name: n8n
+    name: n8n-web
     env: docker
     plan: free
     dockerfilePath: ./Dockerfile
@@ -16,3 +17,41 @@ services:
         value: "0.0.0.0"
       - key: N8N_PORT
         value: "5678"
+      - key: N8N_ENCRYPTION_KEY
+        value: "super-secret-key"
+      - key: DB_TYPE
+        value: "postgresdb"
+      - key: DB_POSTGRESDB_HOST
+        value: "<your-db-host>"
+      - key: DB_POSTGRESDB_PORT
+        value: "5432"
+      - key: DB_POSTGRESDB_DATABASE
+        value: "<your-db-name>"
+      - key: DB_POSTGRESDB_USER
+        value: "<your-db-user>"
+      - key: DB_POSTGRESDB_PASSWORD
+        value: "<your-db-password>"
+
+  # Worker service (background jobs)
+  - type: worker
+    name: n8n-worker
+    env: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    autoDeploy: true
+    startCommand: "n8n worker"
+    envVars:
+      - key: N8N_ENCRYPTION_KEY
+        value: "super-secret-key"
+      - key: DB_TYPE
+        value: "postgresdb"
+      - key: DB_POSTGRESDB_HOST
+        value: "dpg-d6s1a78gjchc73bj5ik0-a"
+      - key: DB_POSTGRESDB_PORT
+        value: "5432"
+      - key: DB_POSTGRESDB_DATABASE
+        value: "n8n_db_uyys"
+      - key: DB_POSTGRESDB_USER
+        value: "n8n_db_uyys_user"
+      - key: DB_POSTGRESDB_PASSWORD
+        value: "izS0tbxSLwUOqP4lYfNnVDf0P79hzbEf"
